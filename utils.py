@@ -1,8 +1,9 @@
 import os
-from torchvision import datasets, transforms
-import shutil
-import torch
 import random
+import shutil
+
+import torch
+from torchvision import datasets, transforms
 
 
 # Count images for train valid test split
