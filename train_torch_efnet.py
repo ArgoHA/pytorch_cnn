@@ -68,9 +68,9 @@ def infer(model_path, valid_data, test_data, device, classes):
 
 
 def main():
-    path_to_folder = Path('/Users/argosaakyan/Data/dis_arm/classification/crops')
-    path_to_save = Path('/Users/argosaakyan/Data/dis_arm/classification/torch_model/efnet')
-    device = torch.device('mps')
+    path_to_folder = Path('')
+    path_to_save = Path('')
+    device = torch.device('mps') # cuda if you use nvidia gpu
 
     classes = ['small_gun', 'big_gun', 'phone', 'umbrella', 'empty']
     im_size = 256, 256
