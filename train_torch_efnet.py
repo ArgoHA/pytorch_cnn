@@ -69,8 +69,8 @@ def infer(model_path, valid_data, test_data, device, classes):
 
 
 def main():
-    path_to_folder = Path('')
-    path_to_save = Path('')
+    path_to_folder = Path('path_to_folder')
+    path_to_save = Path('path_to_save')
     device = torch.device('mps') # cuda if you use nvidia gpu
 
     classes = ['class_1', 'class_2']
@@ -82,9 +82,11 @@ def main():
 
     torch.manual_seed(42)
 
-    train_data, valid_data, test_data = get_splited_data(path_to_folder, valid_part, test_part,
-                                                         classes, im_size, batch_size)
-
+    train_data, valid_data, test_data = get_splited_data(
+        path_to_folder, valid_part, test_part,
+        classes, im_size, batch_size
+        )
+    
     model = build_model(len(classes), device) # build the model
     loss_func = nn.CrossEntropyLoss() # init loss function (combined with final activation)
     optimizer = torch.optim.Adam(model.parameters())
