@@ -1,4 +1,3 @@
-# This model was trained in colab with accuracy on test dataset 98%
 import os
 import time
 from pathlib import Path
@@ -52,7 +51,6 @@ def train(
         if f1 > best_metric:
             best_metric = f1
             torch.save(model.state_dict(), os.path.join(path_to_save, "model.pt"))
-            # torch.save(model, os.path.join(path_to_save, 'model.pt'))
 
 
 def infer(model_path, valid_data, test_data, device, classes):
@@ -71,13 +69,11 @@ def infer(model_path, valid_data, test_data, device, classes):
 
 
 def main():
-    path_to_folder = Path("/Users/argosaakyan/Data/dis_arm/classification/crops")
-    path_to_save = Path(
-        "/Users/argosaakyan/Data/dis_arm/classification/torch_model/efnet"
-    )
+    path_to_folder = Path("path_to_folder")
+    path_to_save = Path("path_to_save")
     device = torch.device("mps")  # cuda if you use nvidia gpu
 
-    classes = ["small_gun", "big_gun", "phone", "umbrella", "empty"]
+    classes = ["class_1", "class_2"]
     im_size = 256, 256
     valid_part = 0.15
     test_part = 0.05
