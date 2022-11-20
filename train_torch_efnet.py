@@ -1,14 +1,15 @@
 # This model was trained in colab with accuracy on test dataset 98%
-import torch
-from torch import nn
 import os
-from tqdm import tqdm
-from sklearn.metrics import f1_score, accuracy_score
-from pathlib import Path
-import torchvision.models as models
 import time
+from pathlib import Path
 
-from utils import get_splited_data, get_preds
+import torch
+import torchvision.models as models
+from sklearn.metrics import accuracy_score, f1_score
+from torch import nn
+from tqdm import tqdm
+
+from utils import get_preds, get_splited_data
 
 
 def build_model(num_classes, device):
