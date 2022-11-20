@@ -71,7 +71,7 @@ def infer(model_path, valid_data, test_data, device, classes):
 def main():
     path_to_folder = Path("path_to_folder")
     path_to_save = Path("path_to_save")
-    device = torch.device("mps")  # cuda if you use nvidia gpu
+    device = torch.device("mps")  # 'cuda' if you use nvidia gpu
 
     classes = ["class_1", "class_2"]
     im_size = 256, 256
