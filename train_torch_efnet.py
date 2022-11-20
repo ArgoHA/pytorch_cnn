@@ -73,7 +73,7 @@ def main():
     path_to_save = Path('')
     device = torch.device('mps') # cuda if you use nvidia gpu
 
-    classes = ['small_gun', 'big_gun', 'phone', 'umbrella', 'empty']
+    classes = ['class_1', 'class_2']
     im_size = 256, 256
     valid_part = 0.15
     test_part = 0.05
