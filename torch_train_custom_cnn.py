@@ -102,8 +102,6 @@ def infer(model_path, valid_data, test_data, device):
     test_accuracy = round(accuracy_score(*get_preds(model, test_data, device)), 2)
     work_time = time.perf_counter() - start_time
 
-    print(f'Took {work_time} seconds to proced {len(valid_data) + len(test_data)} images')
-    print(f'{work_time / (len(valid_data) + len(test_data))} seconds per image')
     print(f'{valid_accuracy = }, {test_accuracy = }')
 
 
