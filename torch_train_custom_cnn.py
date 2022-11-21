@@ -130,7 +130,7 @@ def main():
 
     train(train_data, device, optimizer, model, loss_func, valid_data, epochs, path_to_save)
 
-    infer(path_to_save / 'model_prod.pt', valid_data, test_data, device)
+    infer(path_to_save / 'model.pt', valid_data, test_data, device)
 
 
 if __name__ == '__main__':
