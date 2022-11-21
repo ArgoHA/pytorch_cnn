@@ -9,9 +9,9 @@ import time
 from utils import get_splited_data, get_preds
 
 
-class Gun_classifier(nn.Module):
+class Custom_classifier(nn.Module):
     def __init__(self):
-        super(Gun_classifier, self).__init__()
+        super(Custom_classifier, self).__init__()
 
         self.features = nn.Sequential(
             # input channels, output channels, kernel size, padding
@@ -59,15 +59,12 @@ class Gun_classifier(nn.Module):
       return x
 
 
-def train(train_data, device, optimizer, model, loss_func, valid_data, epochs, path_to_save, scheduler):
+def train(train_data, device, optimizer, model, loss_func, valid_data, epochs, path_to_save):
     best_metric = 0
 
     for epoch in range(1, epochs + 1):
         model.train() # set mode
 
-        lrs=[]
-
-        lr_update = epoch % 2 == 0
         with tqdm(train_data, unit="batch") as tepoch:
             for data, target in tepoch:
                 tepoch.set_description(f"Epoch {epoch}/{epochs}")
@@ -81,8 +78,6 @@ def train(train_data, device, optimizer, model, loss_func, valid_data, epochs, p
                 loss.backward()
                 optimizer.step()
 
-                lr=optimizer.param_groups[0]["lr"]
-
         # Get metrics after an epoch
         preds, valid_labels = get_preds(model, valid_data, device)
         f1 = f1_score(preds, valid_labels, average='weighted')
@@ -94,11 +89,6 @@ def train(train_data, device, optimizer, model, loss_func, valid_data, epochs, p
         if f1 > best_metric:
             best_metric = f1
             torch.save(model.state_dict(), os.path.join(path_to_save, 'model.pt'))
-            # torch.save(model, os.path.join(path_to_save, 'model.pt'))
-
-        if lr_update:
-            lrs.append(lr)
-            scheduler.step()
 
 
 def infer(model_path, valid_data, test_data, device):
@@ -114,16 +104,15 @@ def infer(model_path, valid_data, test_data, device):
 
     print(f'Took {work_time} seconds to proced {len(valid_data) + len(test_data)} images')
     print(f'{work_time / (len(valid_data) + len(test_data))} seconds per image')
-
     print(f'{valid_accuracy = }, {test_accuracy = }')
 
 
 def main():
-    path_to_folder = Path('/Users/argosaakyan/Data/dis_arm/classification/crops')
-    path_to_save = Path('/Users/argosaakyan/Data/dis_arm/classification/torch_model')
-    device = torch.device('mps')
+    path_to_folder = Path('path_to_folder')
+    path_to_save = Path('path_to_save')
+    device = torch.device('mps') # 'cuda' if ypu use nvidia gpu
 
-    classes = ['big_gun', 'empty', 'phone', 'small_gun', 'umbrella']
+    classes = ['class_1', 'class_2']
     im_size = 178, 178
     valid_part = 0.15
     test_part = 0.05
@@ -137,12 +126,9 @@ def main():
 
     model = Gun_classifier().to(device) # build the model
     loss_func = nn.CrossEntropyLoss() # init loss function (combined with final activation)
+    optimizer = torch.optim.Adam(model.parameters())
 
-    lmbda = lambda epoch: 0.75
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
-    scheduler = torch.optim.lr_scheduler.MultiplicativeLR(optimizer, lr_lambda=lmbda)
-
-    train(train_data, device, optimizer, model, loss_func, valid_data, epochs, path_to_save, scheduler)
+    train(train_data, device, optimizer, model, loss_func, valid_data, epochs, path_to_save)
 
     infer(path_to_save / 'model_prod.pt', valid_data, test_data, device)
 
